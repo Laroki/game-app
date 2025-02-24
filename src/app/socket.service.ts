@@ -9,7 +9,7 @@ export class SocketService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io('http://16.171.199.162:3000'); // Adresse du backend NestJS
+    this.socket = io('http://16.171.153.224:3000'); // Adresse du backend NestJS
   }
 
   emit(event: string, data?: any) {
