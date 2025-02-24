@@ -103,6 +103,8 @@
 <div *ngIf="gameData?.finished"
     class="overflow-hidden rounded-lg bg-white shadow m-auto mt-80  flex flex-col justify-center items-center">
     <h1>Victoire !</h1>
+    <h2>Le mot que vous avez trouvé:</h2>
+    <strong>{{gameData.players[0].currentWord}}</strong>
     <button
         class="mt-2 rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         (click)="restart()">Restart</button>
