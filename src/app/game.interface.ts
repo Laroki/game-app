@@ -3,6 +3,7 @@ export interface Game {
     players: Player[];
     finished: boolean;
     round: number;
+    isPrivate: boolean;
 }
 
 export interface Player {

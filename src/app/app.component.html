@@ -21,6 +21,14 @@
                 class="rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 (click)="createGame()">Create Game</button>
 
+            <label class="inline-flex items-center cursor-pointer my-2">
+                <input type="checkbox" value="" class="sr-only peer" [(ngModel)]="isPrivate">
+                <div
+                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
+                </div>
+                <span class="ms-3 text-sm">Partie {{ isPrivate ? 'Privée' : 'Public'}}</span>
+            </label>
+
             <span class="m-4">OR</span>
             <div class="flex flex-col">
                 <div
@@ -34,6 +42,18 @@
                 <button
                     class="mt-2 rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     (click)="joinGame()">Join Game</button>
+
+                <div>
+                    <h2>Public Games</h2>
+                    <ul>
+                        <li *ngFor="let game of games"> {{game.players[0].name}}
+                            <button (click)="joinGame(game.id)"
+                                class="mt-2 rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                Rejoindre
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -68,7 +88,7 @@
     </div>
 
     <!-- Historique -->
-    <div class="flex">
+    <div class="flex" *ngIf="(gameData.players[0] && gameData.players[1])">
         <!-- Historique du Joueur 1 -->
         <div class="w-1/2 p-4 border-r">
             <h3 class="text-lg font-semibold mb-2">Historique de {{ gameData?.players?.[0]?.name }}</h3>
@@ -86,7 +106,8 @@
     </div>
 </div>
 
-<div *ngIf="(gameData && !wordSent) && !gameData?.finished" class="max-w-xl m-auto flex flex-col mt-4">
+<div *ngIf="(gameData && !wordSent) && !gameData?.finished && (gameData.players[0] && gameData.players[1])"
+    class="max-w-xl m-auto flex flex-col mt-4">
     <div
         class="rounded-md bg-white px-3 pb-1.5 pt-2.5 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
         <label htmlFor="word" class="block text-xs font-medium text-gray-900">

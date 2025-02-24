@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SocketService } from './socket.service';
 import { JsonPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Game } from './game.interface';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,8 @@ export class AppComponent {
   gameData: any = null;
   playerNameisSet = false
   wordSent = false
+  isPrivate = true
+  games: Game[] = []
 
   constructor(private socketService: SocketService) { }
 
@@ -25,7 +28,12 @@ export class AppComponent {
       console.log("eer", err)
     });
 
+    this.socketService.listen('gameListChanged').subscribe((games: any) => {
+      this.games = games;
+    });
+
     this.socketService.listen('gameCreated').subscribe((game: any) => {
+      console.log(game)
       this.gameData = game;
       this.gameId = game.id
     });
@@ -37,7 +45,6 @@ export class AppComponent {
 
     this.socketService.listen('wordAdded').subscribe((game: any) => {
       this.wordSent = !game.wordsFilled
-      console.log("word", game)
       this.gameData = game;
     });
 
@@ -48,14 +55,14 @@ export class AppComponent {
   }
 
   createGame() {
-    this.socketService.emit('createGame', this.playerId);
+    this.socketService.emit('createGame', { playerName: this.playerId, isPrivate: this.isPrivate });
   }
 
-  joinGame() {
+  joinGame(gameID: string = this.gameId) {
     if (this.playerId.trim()) {
       console.log("Join")
       console.log(this.gameId, this.playerId)
-      this.socketService.emit('joinGame', { gameId: this.gameId, playerName: this.playerId });
+      this.socketService.emit('joinGame', { gameId: gameID, playerName: this.playerId });
     }
   }
 
@@ -71,6 +78,7 @@ export class AppComponent {
     if (this.playerId !== '') {
       this.playerId = this.playerId.trim()
       this.playerNameisSet = true
+      this.socketService.emit('addPlayerToLobby');
     }
   }
 
